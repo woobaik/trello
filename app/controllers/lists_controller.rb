@@ -61,8 +61,7 @@ class ListsController < ApplicationController
     end
   end
 
-
-  def move 
+  def move
     @list.insert_at(list_params[:position].to_i)
     render :index
   end

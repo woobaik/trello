@@ -55,18 +55,19 @@ export default {
 
       }
     },
-    changeList: function(evt) {
+    changeList: function(event) {
       var data = new FormData
-      data.append('list[position]', evt.newIndex + 1)
-      console.log(data)
+      data.append('list[position]', event.newIndex + 1)
+
       Rails.ajax({
-        url: `lists/${this.lists[evt.newIndex].id}/move`,
+        url: `lists/${this.lists[event.newIndex].id}/move`,
         type: 'PATCH',
         data: data,
-        datatype: 'json'
+        dataType: 'json'
       })
-      console.log('hoho')
-    } 
+    }
+    
+
   }
 }
 </script>
