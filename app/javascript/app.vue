@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="row">
+  <draggable v-model="lists" class="row dragList" :group="lists" id="app" @end="changeList">
     <div v-for="list in lists" :key="list.name" class="col-3">
       <h6>{{ list.name}}</h6>
       <hr />
@@ -14,11 +14,16 @@
         <button class="btn btn-secondary" @click="addTask(list)">Add Task</button>
       </div>
     </div>
-  </div>
+  
+  </draggable>
+  
 </template>
 
 <script>
+import draggable from 'vuedraggable'
+
 export default {
+  components: { draggable },
   props: ["original_lists"],
   data: function() {
     return {
@@ -50,6 +55,18 @@ export default {
 
       }
     },
+    changeList: function(evt) {
+      var data = new FormData
+      data.append('list[position]', evt.newIndex + 1)
+      console.log(data)
+      Rails.ajax({
+        url: `lists/${this.lists[evt.newIndex].id}/move`,
+        type: 'PATCH',
+        data: data,
+        datatype: 'json'
+      })
+      console.log('hoho')
+    } 
   }
 }
 </script>
@@ -58,5 +75,9 @@ export default {
 p {
   font-size: 2em;
   text-align: center;
+}
+
+.dragList {
+  min-height: 20px;
 }
 </style>
