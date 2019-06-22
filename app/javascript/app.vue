@@ -4,8 +4,14 @@
       <h6>{{ list.name}}</h6>
       <hr />
 
-      <div v-for="(card, index) in list.cards" :key="card.name" class="card card-body">
+      
+      <div v-for="(card, index) in list.cards" :key="index" class="card card-body mb-3">
         {{ card.name}}
+      </div>
+
+      <div>
+        <textarea rows="3"></textarea>
+        <button class="btn btn-secondary"></button>
       </div>
     </div>
   </div>
