@@ -4,10 +4,12 @@
       <h6>{{ list.name}}</h6>
       <hr />
 
+      <draggable v-model="list.cards" :group="cards" @change="changeCard" >
+        <div v-for="(card, index) in list.cards" :key="index" class="card card-body mb-3">
+          {{ card.name}}
+        </div>
+      </draggable>
       
-      <div v-for="(card, index) in list.cards" :key="index" class="card card-body mb-3">
-        {{ card.name}}
-      </div>
 
       <div class="card card-body">
         <textarea rows="3" class="form-control" v-model='messages[list.id]'></textarea>
@@ -65,6 +67,10 @@ export default {
         data: data,
         dataType: 'json'
       })
+    },
+
+    changeCard: function(evt) {
+      console.log(evt)
     }
     
 
