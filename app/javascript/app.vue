@@ -3,12 +3,14 @@
     <div v-for="list in lists" :key="list.name" class="col-3">
       <h6>{{ list.name}}</h6>
       <hr />
-
-      <draggable v-model="list.cards" :group="cards" @change="changeCard" >
+      
+      <draggable v-model="list.cards" :options="{ group:'cards'}" @change="changeCard">
         <div v-for="(card, index) in list.cards" :key="index" class="card card-body mb-3">
           {{ card.name}}
         </div>
       </draggable>
+        
+    
       
 
       <div class="card card-body">
@@ -67,18 +69,32 @@ export default {
         data: data,
         dataType: 'json'
       })
-    },
-
+    }, 
     changeCard: function(evt) {
-      console.log(evt)
-    }
-    
+        if (evt.added === undefined) {return}
+        const listIndex = this.lists.findIndex(list => {
+          return list.cards.find(card => {
+            return card.id === evt.added.element.id
+          })
+        })
 
+        var data = new FormData
+        data.append('card[list_id]', this.lists[listIndex].id)
+        data.append('card[position]', evt.added.newIndex + 1)
+
+        Rails.ajax({
+          url: `cards/${evt.added.element.id}/move`,
+          data: data,
+          type: 'PATCH',
+          dataType: 'json'
+        })
+        
+    }
   }
 }
 </script>
 
-<style scoped>
+<style scoped> 
 p {
   font-size: 2em;
   text-align: center;
