@@ -71,19 +71,22 @@ export default {
       })
     }, 
     changeCard: function(evt) {
-        if (evt.added === undefined) {return}
+        const event = evt.added || evt.moved
+        if (event === undefined) {return}
+
+        const element = evt.element
         const listIndex = this.lists.findIndex(list => {
           return list.cards.find(card => {
-            return card.id === evt.added.element.id
+            return card.id === event.element.id
           })
         })
 
         var data = new FormData
         data.append('card[list_id]', this.lists[listIndex].id)
-        data.append('card[position]', evt.added.newIndex + 1)
+        data.append('card[position]', event.newIndex + 1)
 
         Rails.ajax({
-          url: `cards/${evt.added.element.id}/move`,
+          url: `cards/${event.element.id}/move`,
           data: data,
           type: 'PATCH',
           dataType: 'json'
